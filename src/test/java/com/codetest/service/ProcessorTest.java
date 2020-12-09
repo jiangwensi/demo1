@@ -31,33 +31,11 @@ class ProcessorTest {
     Utility utility;
 
     @Test
-    void generateReport() throws IOException {
-        Map<String, String> resultMap = new LinkedHashMap<>();
-        resultMap.put("Total Income","21201.4");
-        resultMap.put("Total Expenses","16042.99");
-        resultMap.put("Total Savings","5158.41");
-        resultMap.put("Top Expenses Month","6000.8 @Feb");
-
-        processor.generateReport("src/test/resources/output.txt",resultMap);
-        List<String> readData = readFile("src/test/resources/output.txt");
-        assertEquals(4, readData.size());
-        assertTrue(readData.get(0).startsWith("Total Income :"));
-        assertTrue(readData.get(0).endsWith("21201.4"));
-        assertTrue(readData.get(1).startsWith("Total Expenses :"));
-        assertTrue(readData.get(1).endsWith("16042.99"));
-        assertTrue(readData.get(2).startsWith("Total Savings :"));
-        assertTrue(readData.get(2).endsWith("5158.41"));
-        assertTrue(readData.get(3).startsWith("Top Expenses Month :"));
-        assertTrue(readData.get(3).endsWith("6000.8 @Feb"));
-    }
-
-    @Test
     void process() throws IOException {
-        List<String> text = testData();
 
         given(utility.month(2)).willReturn("Feb");
 
-        processor.process("src/test/resources/data.txt","src/test/resources/output.txt");
+        processor.process("src/test/resources/data.txt", "src/test/resources/output.txt");
 
         List<String> readData = readFile("src/test/resources/output.txt");
         assertEquals(4, readData.size());
@@ -79,6 +57,7 @@ class ProcessorTest {
 
     @Test
     void readFileException() {
+
         assertThrows(IOException.class, () -> processor.readFile("notexists.txt"));
     }
 
@@ -101,6 +80,28 @@ class ProcessorTest {
         assertEquals(txn1, transactions.get(1));
         assertEquals(txn2, transactions.get(2));
 
+    }
+
+
+    @Test
+    void generateReport() throws IOException {
+        Map<String, String> resultMap = new LinkedHashMap<>();
+        resultMap.put("Total Income", "21201.4");
+        resultMap.put("Total Expenses", "16042.99");
+        resultMap.put("Total Savings", "5158.41");
+        resultMap.put("Top Expenses Month", "6000.8 @Feb");
+
+        processor.generateReport("src/test/resources/output.txt", resultMap);
+        List<String> readData = readFile("src/test/resources/output.txt");
+        assertEquals(4, readData.size());
+        assertTrue(readData.get(0).startsWith("Total Income :"));
+        assertTrue(readData.get(0).endsWith("21201.4"));
+        assertTrue(readData.get(1).startsWith("Total Expenses :"));
+        assertTrue(readData.get(1).endsWith("16042.99"));
+        assertTrue(readData.get(2).startsWith("Total Savings :"));
+        assertTrue(readData.get(2).endsWith("5158.41"));
+        assertTrue(readData.get(3).startsWith("Top Expenses Month :"));
+        assertTrue(readData.get(3).endsWith("6000.8 @Feb"));
     }
 
     private List<String> testData() {
